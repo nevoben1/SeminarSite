@@ -4,194 +4,357 @@
     <meta charset="UTF-8">
     <title>כרטיסיות אמת בבקבוק</title>
     <style>
-        @import url('https://googleapis.com');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap');
+
+        * { box-sizing: border-box; }
+
         body {
             font-family: 'Rubik', sans-serif;
-            background-color: #f4f4f4;
-            margin: 20px;
-        }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .card {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            padding: 20px;
-            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            height: 220px;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: white;
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        #counter {
+            color: rgba(255,255,255,0.8);
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        /* Card stack */
+        #card-stack {
+            position: relative;
+            width: 320px;
+            height: 240px;
+            margin-bottom: 40px;
+        }
+
+        /* Shadow cards behind */
+        #card-stack::before,
+        #card-stack::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.3);
+        }
+        #card-stack::before {
+            top: -8px;
+            left: -6px;
+            transform: rotate(-3deg);
+        }
+        #card-stack::after {
+            top: -4px;
+            left: -3px;
+            transform: rotate(-1.5deg);
+        }
+
+        /* 3D flip container */
+        .flip-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            perspective: 1000px;
+            z-index: 1;
+        }
+
+        .flipper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .flipper.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Back of card */
+        .card-back {
+            background: white;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            font-size: 48px;
+            color: #764ba2;
+            border: 4px solid #764ba2;
+        }
+
+        .card-back .back-label {
+            font-size: 18px;
+            font-weight: 700;
+            color: #764ba2;
+            margin-top: 10px;
+        }
+
+        /* Front of card */
+        .card-front {
+            transform: rotateY(180deg);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
             border: 4px solid #ccc;
-            page-break-inside: avoid;
+            background: white;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .card-title {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             color: white;
-            padding: 10px;
+            padding: 10px 16px;
             border-radius: 8px;
-            margin-bottom: 15px;
+            width: 100%;
         }
 
         .card-text {
             font-size: 16px;
             color: #333;
-            line-height: 1.5;
+            line-height: 1.6;
             flex-grow: 1;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 500;
+            padding: 10px 0;
         }
 
-        /* צבעים מגוונים לכרטיסיות */
-        .yellow { border-color: #ffcc00; }
-        .yellow .card-title { background-color: #ffcc00; color: #333; }
+        /* Color themes */
+        .color-yellow { border-color: #ffcc00 !important; }
+        .color-yellow .card-title { background-color: #ffcc00; color: #333; }
 
-        .blue { border-color: #007bff; }
-        .blue .card-title { background-color: #007bff; }
+        .color-blue { border-color: #007bff !important; }
+        .color-blue .card-title { background-color: #007bff; }
 
-        .green { border-color: #28a745; }
-        .green .card-title { background-color: #28a745; }
+        .color-green { border-color: #28a745 !important; }
+        .color-green .card-title { background-color: #28a745; }
 
-        .orange { border-color: #ff7f50; }
-        .orange .card-title { background-color: #ff7f50; }
+        .color-orange { border-color: #ff7f50 !important; }
+        .color-orange .card-title { background-color: #ff7f50; }
 
-        .purple { border-color: #6f42c1; }
-        .purple .card-title { background-color: #6f42c1; }
+        .color-purple { border-color: #6f42c1 !important; }
+        .color-purple .card-title { background-color: #6f42c1; }
 
-        .teal { border-color: #20c997; }
-        .teal .card-title { background-color: #20c997; }
+        .color-teal { border-color: #20c997 !important; }
+        .color-teal .card-title { background-color: #20c997; }
 
-        @media print {
-            body { background: white; margin: 0; }
-            .card { box-shadow: none; }
+        /* Empty state */
+        #empty-state {
+            display: none;
+            width: 320px;
+            height: 240px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 16px;
+            border: 3px dashed rgba(255,255,255,0.5);
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 40px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #empty-state .empty-icon { font-size: 40px; margin-bottom: 10px; }
+
+        /* Button */
+        #main-btn {
+            font-family: 'Rubik', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            padding: 16px 48px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+        }
+
+        #main-btn.draw {
+            background: white;
+            color: #764ba2;
+        }
+
+        #main-btn.reset {
+            background: #ff7f50;
+            color: white;
+        }
+
+        #main-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+        }
+
+        #main-btn:active {
+            transform: translateY(0);
         }
     </style>
 </head>
 <body>
 
-<div class="grid-container">
+<h1>🃏 אמת בבקבוק — סמינר</h1>
+<div id="counter"></div>
 
-    <!-- סט צהוב -->
-    <div class="card yellow">
-        <div class="card-title"> נקודת שיא 🌟</div>
-        <div class="card-text">מה הייתה נקודת השיא שלך בסמינר?</div>
+<div id="card-stack">
+    <div class="flip-container">
+        <div class="flipper" id="flipper">
+            <div class="card-face card-back">
+                <div>🎴</div>
+                <div class="back-label">משוך כרטיס</div>
+            </div>
+            <div class="card-face card-front" id="card-front">
+                <div class="card-title" id="card-title"></div>
+                <div class="card-text" id="card-text"></div>
+            </div>
+        </div>
     </div>
-    <div class="card yellow">
-        <div class="card-title"> נקודת שפל 📉</div>
-        <div class="card-text">מה הייתה נקודת השפל שלך בסמינר?</div>
-    </div>
-    <div class="card yellow">
-        <div class="card-title"> רושם ראשוני 👀</div>
-        <div class="card-text">הכי הרשים אותי בשיחה עם הפעילים החברתיים...</div>
-    </div>
-    <div class="card yellow">
-        <div class="card-title"> זיכרון מתוק 💭</div>
-        <div class="card-text">רגע מהסמינר שאני זוכר...</div>
-    </div>
-
-    <!-- סט כחול -->
-    <div class="card blue">
-        <div class="card-title"> רגשות צפים ❤️</div>
-        <div class="card-text">רגש שעלה לי בזמן הסמינר</div>
-    </div>
-    <div class="card blue">
-        <div class="card-title"> מחשבה לעתיד 🚀</div>
-        <div class="card-text">בעקבות הסמינר חשבתי על...</div>
-    </div>
-    <div class="card blue">
-        <div class="card-title"> בתים מבפנים 🏡</div>
-        <div class="card-text">המפגש עם המארחים ב"בתים מבפנים" עורר בי...</div>
-    </div>
-    <div class="card blue">
-        <div class="card-title"> ציפייה מול מציאות 🎭</div>
-        <div class="card-text">לפני הסמינר דמיינתי אותו בצורה מסוימת, במציאות הוא היה...</div>
-    </div>
-
-    <!-- סט ירוק -->
-    <div class="card green">
-        <div class="card-title"> נקודה על המפה 📍</div>
-        <div class="card-text">מקום שאני מתכוון לחזור אליו</div>
-    </div>
-    <div class="card green">
-        <div class="card-title"> רעיון לשדרוג 💡</div>
-        <div class="card-text">הייתי מוסיף לסמינר...</div>
-    </div>
-    <div class="card green">
-        <div class="card-title"> פחות זה יותר 🍃</div>
-        <div class="card-text">הייתי מוותר על...</div>
-    </div>
-    <div class="card green">
-        <div class="card-title"> שינוי פנימי 🌱</div>
-        <div class="card-text">מה השתנה לי בעקבות הסמינר</div>
-    </div>
-
-    <!-- סט כתום -->
-    <div class="card orange">
-        <div class="card-title"> תובנה חדשה 🎓</div>
-        <div class="card-text">למדתי בסמינר ש...</div>
-    </div>
-    <div class="card orange">
-        <div class="card-title"> סיפורי עבר 📜</div>
-        <div class="card-text">המפגש עם ותיקי הקיבוץ היה...</div>
-    </div>
-    <div class="card orange">
-        <div class="card-title"> אירוח ביתי 🤝</div>
-        <div class="card-text">המפגש עם מארחי הבתים היה...</div>
-    </div>
-    <div class="card orange">
-        <div class="card-title"> סיור שטח 🏙️</div>
-        <div class="card-text">הסיור בחיפה, בשכונת הדר, גרם לי לחשוב על...</div>
-    </div>
-
-    <!-- סט סגול -->
-    <div class="card purple">
-        <div class="card-title"> מול המסך 🎬</div>
-        <div class="card-text">בצפייה בסרט הרגשתי ש...</div>
-    </div>
-    <div class="card purple">
-        <div class="card-title"> חברה ישראלית 🤝</div>
-        <div class="card-text">מחשבות שעלו לי לגבי הפערים בחברה הישראלית</div>
-    </div>
-    <div class="card purple">
-        <div class="card-title"> רגע אישי ✨</div>
-        <div class="card-text">היה לי רגע מיוחד עם...</div>
-    </div>
-    <div class="card purple">
-        <div class="card-title"> מקומיים מספרים 🗣️</div>
-        <div class="card-text">למדתי מתושבי חיפה...</div>
-    </div>
-
-    <!-- סט טורקיז -->
-    <div class="card teal">
-        <div class="card-title"> אחרי השקיעה קומזיץ 🌌</div>
-        <div class="card-text">הערבים באכסניה היו...</div>
-    </div>
-    <div class="card teal">
-        <div class="card-title"> על הבמה 🎭</div>
-        <div class="card-text">הצפייה בהצגה הייתה עבורי...</div>
-    </div>
-    <div class="card teal">
-        <div class="card-title"> גיבוש כיתתי 🎒</div>
-        <div class="card-text">למדתי על הכיתה שלי ש...</div>
-    </div>
-    <div class="card teal">
-        <div class="card-title"> ביחד 👥</div>
-        <div class="card-text">איך היה עבורי להיות בקבוצה מעורבת שכבתית</div>
-    </div>
-
 </div>
+
+<div id="empty-state">
+    <div class="empty-icon">🎉</div>
+    <div>כל הכרטיסים נמשכו!<br>לחץ אפס להתחלה מחדש</div>
+</div>
+
+<button id="main-btn" class="draw" onclick="handleBtn()">לחץ לקבלת כרטיס</button>
+
+<script>
+    const CARDS = [
+        { color: 'yellow', title: 'נקודת שיא 🌟',       text: 'מה הייתה נקודת השיא שלך בסמינר?' },
+        { color: 'yellow', title: 'נקודת שפל 📉',       text: 'מה הייתה נקודת השפל שלך בסמינר?' },
+        { color: 'yellow', title: 'רושם ראשוני 👀',      text: 'הכי הרשים אותי בשיחה עם הפעילים החברתיים...' },
+        { color: 'yellow', title: 'זיכרון מתוק 💭',      text: 'רגע מהסמינר שאני זוכר...' },
+        { color: 'blue',   title: 'רגשות צפים ❤️',       text: 'רגש שעלה לי בזמן הסמינר' },
+        { color: 'blue',   title: 'מחשבה לעתיד 🚀',      text: 'בעקבות הסמינר חשבתי על...' },
+        { color: 'blue',   title: 'בתים מבפנים 🏡',      text: 'המפגש עם המארחים ב"בתים מבפנים" עורר בי...' },
+        { color: 'blue',   title: 'ציפייה מול מציאות 🎭', text: 'לפני הסמינר דמיינתי אותו בצורה מסוימת, במציאות הוא היה...' },
+        { color: 'green',  title: 'נקודה על המפה 📍',    text: 'מקום שאני מתכוון לחזור אליו' },
+        { color: 'green',  title: 'רעיון לשדרוג 💡',     text: 'הייתי מוסיף לסמינר...' },
+        { color: 'green',  title: 'פחות זה יותר 🍃',     text: 'הייתי מוותר על...' },
+        { color: 'green',  title: 'שינוי פנימי 🌱',      text: 'מה השתנה לי בעקבות הסמינר' },
+        { color: 'orange', title: 'תובנה חדשה 🎓',       text: 'למדתי בסמינר ש...' },
+        { color: 'orange', title: 'סיפורי עבר 📜',       text: 'המפגש עם ותיקי הקיבוץ היה...' },
+        { color: 'orange', title: 'אירוח ביתי 🤝',       text: 'המפגש עם מארחי הבתים היה...' },
+        { color: 'orange', title: 'סיור שטח 🏙️',        text: 'הסיור בחיפה, בשכונת הדר, גרם לי לחשוב על...' },
+        { color: 'purple', title: 'מול המסך 🎬',         text: 'בצפייה בסרט הרגשתי ש...' },
+        { color: 'purple', title: 'חברה ישראלית 🤝',     text: 'מחשבות שעלו לי לגבי הפערים בחברה הישראלית' },
+        { color: 'purple', title: 'רגע אישי ✨',         text: 'היה לי רגע מיוחד עם...' },
+        { color: 'purple', title: 'מקומיים מספרים 🗣️',  text: 'למדתי מתושבי חיפה...' },
+        { color: 'teal',   title: 'אחרי השקיעה קומזיץ 🌌', text: 'הערבים באכסניה היו...' },
+        { color: 'teal',   title: 'על הבמה 🎭',          text: 'הצפייה בהצגה הייתה עבורי...' },
+        { color: 'teal',   title: 'גיבוש כיתתי 🎒',     text: 'למדתי על הכיתה שלי ש...' },
+        { color: 'teal',   title: 'ביחד 👥',             text: 'איך היה עבורי להיות בקבוצה מעורבת שכבתית' },
+    ];
+
+    let deck = [];
+    let isFlipped = false;
+
+    function shuffle(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function init() {
+        deck = shuffle([...CARDS]);
+        isFlipped = false;
+        document.getElementById('flipper').classList.remove('flipped');
+        document.getElementById('card-stack').style.display = 'block';
+        document.getElementById('empty-state').style.display = 'none';
+        updateCounter();
+        setBtn('draw');
+    }
+
+    function updateCounter() {
+        document.getElementById('counter').textContent = deck.length + ' כרטיסים נותרו';
+    }
+
+    function setBtn(mode) {
+        const btn = document.getElementById('main-btn');
+        if (mode === 'draw') {
+            btn.textContent = 'לחץ לקבלת כרטיס';
+            btn.className = 'draw';
+        } else {
+            btn.textContent = 'אפס';
+            btn.className = 'reset';
+        }
+    }
+
+    function handleBtn() {
+        if (isFlipped) {
+            resetCard();
+        } else {
+            drawCard();
+        }
+    }
+
+    function drawCard() {
+        if (deck.length === 0) return;
+
+        const card = deck.pop();
+
+        // Set card content
+        const front = document.getElementById('card-front');
+        front.className = 'card-face card-front color-' + card.color;
+        document.getElementById('card-title').textContent = card.title;
+        document.getElementById('card-text').textContent = card.text;
+
+        // Flip
+        document.getElementById('flipper').classList.add('flipped');
+        isFlipped = true;
+        setBtn('reset');
+        updateCounter();
+    }
+
+    function resetCard() {
+        // Flip back
+        document.getElementById('flipper').classList.remove('flipped');
+        isFlipped = false;
+
+        if (deck.length === 0) {
+            // Show empty state after flip-back animation
+            setTimeout(() => {
+                document.getElementById('card-stack').style.display = 'none';
+                document.getElementById('empty-state').style.display = 'flex';
+                setBtn('reset');
+                document.getElementById('counter').textContent = 'כל הכרטיסים נמשכו!';
+            }, 650);
+        } else {
+            setBtn('draw');
+        }
+    }
+
+    // Start
+    init();
+</script>
 
 </body>
 </html>
