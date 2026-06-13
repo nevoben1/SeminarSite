@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>כרטיסיות אמת בבקבוק</title>
+    <style>
+        @import url('https://googleapis.com');
+        
+        body {
+            font-family: 'Rubik', sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 220px;
+            border: 4px solid #ccc;
+            page-break-inside: avoid;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .card-text {
+            font-size: 16px;
+            color: #333;
+            line-height: 1.5;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+        }
+
+        /* צבעים מגוונים לכרטיסיות */
+        .yellow { border-color: #ffcc00; }
+        .yellow .card-title { background-color: #ffcc00; color: #333; }
+
+        .blue { border-color: #007bff; }
+        .blue .card-title { background-color: #007bff; }
+
+        .green { border-color: #28a745; }
+        .green .card-title { background-color: #28a745; }
+
+        .orange { border-color: #ff7f50; }
+        .orange .card-title { background-color: #ff7f50; }
+
+        .purple { border-color: #6f42c1; }
+        .purple .card-title { background-color: #6f42c1; }
+
+        .teal { border-color: #20c997; }
+        .teal .card-title { background-color: #20c997; }
+
+        @media print {
+            body { background: white; margin: 0; }
+            .card { box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="grid-container">
+
+    <!-- סט צהוב -->
+    <div class="card yellow">
+        <div class="card-title"> נקודת שיא 🌟</div>
+        <div class="card-text">מה הייתה נקודת השיא שלך בסמינר?</div>
+    </div>
+    <div class="card yellow">
+        <div class="card-title"> נקודת שפל 📉</div>
+        <div class="card-text">מה הייתה נקודת השפל שלך בסמינר?</div>
+    </div>
+    <div class="card yellow">
+        <div class="card-title"> רושם ראשוני 👀</div>
+        <div class="card-text">הכי הרשים אותי בשיחה עם הפעילים החברתיים...</div>
+    </div>
+    <div class="card yellow">
+        <div class="card-title"> זיכרון מתוק 💭</div>
+        <div class="card-text">רגע מהסמינר שאני זוכר...</div>
+    </div>
+
+    <!-- סט כחול -->
+    <div class="card blue">
+        <div class="card-title"> רגשות צפים ❤️</div>
+        <div class="card-text">רגש שעלה לי בזמן הסמינר</div>
+    </div>
+    <div class="card blue">
+        <div class="card-title"> מחשבה לעתיד 🚀</div>
+        <div class="card-text">בעקבות הסמינר חשבתי על...</div>
+    </div>
+    <div class="card blue">
+        <div class="card-title"> בתים מבפנים 🏡</div>
+        <div class="card-text">המפגש עם המארחים ב"בתים מבפנים" עורר בי...</div>
+    </div>
+    <div class="card blue">
+        <div class="card-title"> ציפייה מול מציאות 🎭</div>
+        <div class="card-text">לפני הסמינר דמיינתי אותו בצורה מסוימת, במציאות הוא היה...</div>
+    </div>
+
+    <!-- סט ירוק -->
+    <div class="card green">
+        <div class="card-title"> נקודה על המפה 📍</div>
+        <div class="card-text">מקום שאני מתכוון לחזור אליו</div>
+    </div>
+    <div class="card green">
+        <div class="card-title"> רעיון לשדרוג 💡</div>
+        <div class="card-text">הייתי מוסיף לסמינר...</div>
+    </div>
+    <div class="card green">
+        <div class="card-title"> פחות זה יותר 🍃</div>
+        <div class="card-text">הייתי מוותר על...</div>
+    </div>
+    <div class="card green">
+        <div class="card-title"> שינוי פנימי 🌱</div>
+        <div class="card-text">מה השתנה לי בעקבות הסמינר</div>
+    </div>
+
+    <!-- סט כתום -->
+    <div class="card orange">
+        <div class="card-title"> תובנה חדשה 🎓</div>
+        <div class="card-text">למדתי בסמינר ש...</div>
+    </div>
+    <div class="card orange">
+        <div class="card-title"> סיפורי עבר 📜</div>
+        <div class="card-text">המפגש עם ותיקי הקיבוץ היה...</div>
+    </div>
+    <div class="card orange">
+        <div class="card-title"> אירוח ביתי 🤝</div>
+        <div class="card-text">המפגש עם מארחי הבתים היה...</div>
+    </div>
+    <div class="card orange">
+        <div class="card-title"> סיור שטח 🏙️</div>
+        <div class="card-text">הסיור בחיפה, בשכונת הדר, גרם לי לחשוב על...</div>
+    </div>
+
+    <!-- סט סגול -->
+    <div class="card purple">
+        <div class="card-title"> מול המסך 🎬</div>
+        <div class="card-text">בצפייה בסרט הרגשתי ש...</div>
+    </div>
+    <div class="card purple">
+        <div class="card-title"> חברה ישראלית 🤝</div>
+        <div class="card-text">מחשבות שעלו לי לגבי הפערים בחברה הישראלית</div>
+    </div>
+    <div class="card purple">
+        <div class="card-title"> רגע אישי ✨</div>
+        <div class="card-text">היה לי רגע מיוחד עם...</div>
+    </div>
+    <div class="card purple">
+        <div class="card-title"> מקומיים מספרים 🗣️</div>
+        <div class="card-text">למדתי מתושבי חיפה...</div>
+    </div>
+
+    <!-- סט טורקיז -->
+    <div class="card teal">
+        <div class="card-title"> אחרי השקיעה קומזיץ 🌌</div>
+        <div class="card-text">הערבים באכסניה היו...</div>
+    </div>
+    <div class="card teal">
+        <div class="card-title"> על הבמה 🎭</div>
+        <div class="card-text">הצפייה בהצגה הייתה עבורי...</div>
+    </div>
+    <div class="card teal">
+        <div class="card-title"> גיבוש כיתתי 🎒</div>
+        <div class="card-text">למדתי על הכיתה שלי ש...</div>
+    </div>
+    <div class="card teal">
+        <div class="card-title"> ביחד 👥</div>
+        <div class="card-text">איך היה עבורי להיות בקבוצה מעורבת שכבתית</div>
+    </div>
+
+</div>
+
+</body>
+</html>
